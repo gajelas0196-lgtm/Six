@@ -3,8 +3,6 @@ name: Build Flutter APK
 on:
   push:
     branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
   workflow_dispatch:
 
 jobs:
@@ -25,15 +23,14 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: '3.22.0' # KUNCI DI SINI: Pakai Flutter versi lama yang stabil
           cache: true
 
       - name: Get Dependencies
         run: flutter pub get
 
-      # CUKUP PAKAI PERINTAH INI SAJA
       - name: Build APK (Release)
-        run: flutter build apk --release --verbose
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
