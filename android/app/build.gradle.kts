@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.arya.xeron"
     compileSdk = 36
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         // Wajib untuk flutter_local_notifications
