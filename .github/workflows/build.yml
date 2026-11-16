@@ -33,7 +33,7 @@ jobs:
 
       # CUKUP PAKAI PERINTAH INI SAJA
       - name: Build APK (Release)
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
