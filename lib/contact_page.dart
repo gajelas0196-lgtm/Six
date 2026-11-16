@@ -111,7 +111,7 @@ class ContactPage extends StatelessWidget {
                           child: _buildContactButton(
                             context: context,
                             label: "Telegram",
-                            icon: FontAwesomeIcons.telegram,
+                            icon: FaFaIcon(FontAwesomeIcons.telegram),
                             color: Colors.blue,
                             url: "https://t.me/xyzyanzzi",
                           ),
@@ -121,7 +121,7 @@ class ContactPage extends StatelessWidget {
                           child: _buildContactButton(
                             context: context,
                             label: "WhatsApp",
-                            icon: FontAwesomeIcons.whatsapp,
+                            icon: FaFaIcon(FontAwesomeIcons.whatsapp),
                             color: Colors.green,
                             url: "https://wa.me/",
                           ),
@@ -135,7 +135,7 @@ class ContactPage extends StatelessWidget {
                           child: _buildContactButton(
                             context: context,
                             label: "TikTok",
-                            icon: FontAwesomeIcons.tiktok,
+                            icon: FaFaIcon(FontAwesomeIcons.tiktok),
                             color: Colors.white,
                             url: "https://www.tiktok.com/@rangga.preset_",
                           ),
@@ -145,7 +145,7 @@ class ContactPage extends StatelessWidget {
                           child: _buildContactButton(
                             context: context,
                             label: "Instagram",
-                            icon: FontAwesomeIcons.instagram,
+                            icon: FaFaIcon(FontAwesomeIcons.instagram),
                             color: Colors.pinkAccent,
                             url: "https://www.instagram.com/rnggagwj",
                           ),

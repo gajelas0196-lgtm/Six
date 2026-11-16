@@ -396,7 +396,7 @@ class _DashboardPageState extends State<DashboardPage>
                       ),
                     ),
                     child: const Icon(
-                      FontAwesomeIcons.whatsapp,
+                      FaIcon(FontAwesomeIcons.whatsapp),
                       size: 34,
                       color: Color(0xFF25D366),
                     ),
@@ -2298,7 +2298,7 @@ class _DashboardPageState extends State<DashboardPage>
                 _JustinWideTile(
                   title: 'Join Channel Telegram',
                   subtitle: 'Channel resmi SixEyesX Community',
-                  icon: FontAwesomeIcons.telegram,
+                  icon: FaFaIcon(FontAwesomeIcons.telegram),
                   color: const Color(0xFF29B6F6),
                   onTap: () => _openUrl('https://t.me/InformasiSyX'),
                 ),
@@ -2417,7 +2417,7 @@ class _DashboardPageState extends State<DashboardPage>
                 _JustinWideTile(
                   title: 'Contact Developer',
                   subtitle: 'Telegram @xyzyanzzi',
-                  icon: FontAwesomeIcons.telegram,
+                  icon: FaFaIcon(FontAwesomeIcons.telegram),
                   color: const Color(0xFF0088CC),
                   onTap: () => _openUrl('https://t.me/xyzyanzzi'),
                 ),
@@ -2809,7 +2809,7 @@ class _DashboardPageState extends State<DashboardPage>
               ),
             ),
             _appBarBtn(
-              icon: FontAwesomeIcons.userCircle,
+              icon: FaFaIcon(FontAwesomeIcons.userCircle),
               tooltip: 'My Profile',
               onTap: () => Navigator.push(
                 context,
@@ -2895,7 +2895,7 @@ class _DashboardPageState extends State<DashboardPage>
           active: _bottomNavIndex == 0,
         ),
         _glazeItem(
-          icon: FontAwesomeIcons.whatsapp,
+          icon: FaFaIcon(FontAwesomeIcons.whatsapp),
           label: 'WA',
           active: _bottomNavIndex == 1,
           size: 20,
@@ -3307,7 +3307,7 @@ class _XeonNavBar extends StatelessWidget {
               Row(
                 children: [
                   _item(0, Icons.home_rounded, 'Home'),
-                  _item(1, FontAwesomeIcons.whatsapp, 'WA'),
+                  _item(1, FaIcon(FontAwesomeIcons.whatsapp), 'WA'),
                   _item(2, Icons.notifications_rounded, 'Info'),
                   _item(3, Icons.build_circle, 'Tools'),
                 ],

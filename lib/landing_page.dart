@@ -533,14 +533,14 @@ class _LandingPageState extends State<LandingPage>
                       Row(
                         children: [
                           _socialBtn(
-                            icon: FontAwesomeIcons.telegram,
+                            icon: FaFaIcon(FontAwesomeIcons.telegram),
                             label: 'Telegram',
                             color: const Color(0xFF29B6F6),
                             onTap: () => _openUrl('https://t.me/xyzyanzzi'),
                           ),
                           const SizedBox(width: 10),
                           _socialBtn(
-                            icon: FontAwesomeIcons.tiktok,
+                            icon: FaFaIcon(FontAwesomeIcons.tiktok),
                             label: 'TikTok',
                             color: const Color(0xFFFF6B6B),
                             onTap: () => _openUrl(
