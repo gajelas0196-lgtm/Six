@@ -31,9 +31,9 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
-      # KITA HANYA BUILD 1 KALI, TAPI PAKAI --stacktrace UNTUK LIHAT ERROR ASLINYA
+      # CUKUP PAKAI PERINTAH INI SAJA
       - name: Build APK (Release)
-        run: flutter build apk --release --stacktrace
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
