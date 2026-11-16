@@ -396,7 +396,7 @@ class _DashboardPageState extends State<DashboardPage>
                       ),
                     ),
                     child: const Icon(
-                      FaIcon(FontAwesomeIcons.whatsapp),
+                      FaFaIcon(FontAwesomeIcons.whatsapp),
                       size: 34,
                       color: Color(0xFF25D366),
                     ),
@@ -3307,7 +3307,7 @@ class _XeonNavBar extends StatelessWidget {
               Row(
                 children: [
                   _item(0, Icons.home_rounded, 'Home'),
-                  _item(1, FaIcon(FontAwesomeIcons.whatsapp), 'WA'),
+                  _item(1, FaFaIcon(FontAwesomeIcons.whatsapp), 'WA'),
                   _item(2, Icons.notifications_rounded, 'Info'),
                   _item(3, Icons.build_circle, 'Tools'),
                 ],

@@ -617,7 +617,7 @@ class _BugSenderPageState extends State<BugSenderPage> with TickerProviderStateM
                 ),
                 child: const Center(
                   child: FaIcon(
-                    FaIcon(FontAwesomeIcons.whatsapp),
+                    FaFaIcon(FontAwesomeIcons.whatsapp),
                     color: Color(0xFF25D366),
                     size: 44,
                   ),
