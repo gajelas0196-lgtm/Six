@@ -81,3 +81,6 @@ flutter:
     - family: hi
       fonts:
         - asset: fonts/ShareTechMono-Regular.ttf
+
+dependency_overrides:
+  font_awesome_flutter: 10.7.0
