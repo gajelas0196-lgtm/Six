@@ -1,0 +1,83 @@
+name: SixEyesX
+description: "Bug WhatsApp Crasher"
+publish_to: 'none'
+version: 19.0.0
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  email_validator: ^2.1.17
+  http: ^1.1.0
+  image_picker: ^1.0.4
+  image_gallery_saver_plus: ^4.0.0
+  fluttertoast: ^8.2.8
+  youtube_player_iframe: ^5.1.2
+  intl: ^0.19.0
+  audioplayers: ^6.0.0
+  url_launcher: ^6.2.6
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.2
+  device_info_plus: ^10.1.0
+  carousel_slider: 4.0.0
+  web_socket_channel: ^2.4.0
+  mime: ^1.0.5
+  http_parser: ^4.0.2
+  file_picker: ^8.1.2
+  network_info_plus: ^4.1.0
+  permission_handler: ^11.0.0
+  video_player: ^2.8.1
+  font_awesome_flutter: 10.8.0
+  path_provider: ^2.1.1
+  share_plus: ^7.0.1
+  chewie: ^1.5.2
+  shimmer: ^3.0.0
+  webview_flutter: ^4.13.1
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
+  geolocator: ^13.0.2
+  glaze_nav_bar: ^1.0.0
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path_android: assets/icon/icon.jpg
+  image_path_ios: assets/icon/icon/icon.jpg
+  image_path: assets/icon/icon.jpg
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo.jpg
+    - assets/images/logo.png
+    - assets/images/banner.jpg
+    - assets/images/anjay.png
+    - assets/videos/landing.mp4
+    - assets/videos/banner.mp4
+    - assets/videos/bg.mp4
+    - assets/videos/bug.mp4
+
+
+  fonts:
+    - family: Orbitron
+      fonts:
+        - asset: fonts/Rajdhani-Regular.ttf
+    - family: ShareTechMono
+      fonts:
+        - asset: fonts/Rajdhani-Regular.ttf
+    - family: Aktura
+      fonts:
+        - asset: fonts/Aktura-Regular.ttf
+    - family: hi
+      fonts:
+        - asset: fonts/ShareTechMono-Regular.ttf

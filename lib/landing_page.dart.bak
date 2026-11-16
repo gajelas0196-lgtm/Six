@@ -1,0 +1,638 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
+import 'login_page.dart';
+import 'tap.dart';
+import 'app_theme.dart';
+
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage>
+    with TickerProviderStateMixin {
+  VideoPlayerController? _videoController;
+  bool _videoReady = false;
+  late AnimationController _entryController;
+
+  @override
+  void initState() {
+    super.initState();
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..forward();
+    _initVideo();
+  }
+
+  Future<void> _initVideo() async {
+    try {
+      final c = VideoPlayerController.asset('assets/videos/anding.mp4');
+      await c.initialize();
+      await c.setLooping(true);
+      await c.setVolume(10);
+      await c.play();
+      c.addListener(() {
+        if (!mounted) return;
+        if (c.value.isInitialized && !c.value.isPlaying) c.play();
+      });
+      if (!mounted) {
+        c.dispose();
+        return;
+      }
+      setState(() {
+        _videoController = c;
+        _videoReady = true;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _videoReady = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _entryController.dispose();
+    _videoController?.dispose();
+    super.dispose();
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    try {
+      final launched =
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Tidak bisa membuka link')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
+
+  void _showPriceList() {
+    final categories = <Map<String, dynamic>>[
+      {
+        "role": "Member",
+        "icon": Icons.person_rounded,
+        "color": const Color(0xFF64B5F6),
+        "prices": [{"duration": "Permanent", "price": "15k"}],
+      },
+      {
+        "role": "VIP",
+        "icon": Icons.shield_rounded,
+        "color": const Color(0xFFFFB74D),
+        "prices": [{"duration": "Permanent", "price": "40k"}],
+        "badge": "Unlock Sender Global!!",
+      },
+      {
+        "role": "Reseller",
+        "icon": Icons.storefront_rounded,
+        "color": const Color(0xFF4DB6AC),
+        "prices": [{"duration": "Permanent", "price": "25k"}],
+      },
+      {
+        "role": "Admin",
+        "icon": Icons.admin_panel_settings_rounded,
+        "color": const Color(0xFFFF6B6B),
+        "prices": [{"duration": "Permanent", "price": "50k"}],
+      },
+      {
+        "role": "Partner",
+        "icon": Icons.handshake_rounded,
+        "color": const Color(0xFFBA68C8),
+        "prices": [{"duration": "Permanent", "price": "80k"}],
+      },
+      {
+        "role": "Moderator",
+        "icon": Icons.security_rounded,
+        "color": const Color(0xFF9CCC65),
+        "prices": [{"duration": "Permanent", "price": "65k"}],
+      },
+      {
+        "role": "Owner",
+        "icon": Icons.star_rounded,
+        "color": const Color(0xFFFFD54F),
+        "prices": [{"duration": "Permanent", "price": "120k"}],
+        "badge": "Unlock Sender Global!!",
+      },
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(ctx).size.height * 0.88,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.bgMain,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border(
+              top: BorderSide(color: AppColors.border, width: 1.5),
+            ),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 44,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.textMuted,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
+                child: Row(
+                  children: [
+                    Icon(Icons.local_fire_department_rounded,
+                        color: AppColors.accent, size: 22),
+                    SizedBox(width: 10),
+                    Text(
+                      "LIST HARGA AKSES",
+                      style: TextStyle(
+                        color: AppColors.textMain,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                  children: [
+                    for (final cat in categories)
+                      _priceCategoryCard(
+                        role: cat["role"] as String,
+                        icon: cat["icon"] as IconData,
+                        color: cat["color"] as Color,
+                        prices:
+                            (cat["prices"] as List).cast<Map<String, String>>(),
+                        badge: cat["badge"] as String?,
+                      ),
+                    const SizedBox(height: 12),
+                    PressableScale(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        _openUrl("https://t.me/xyzyanzzi");
+                      },
+                      child: Container(
+                        height: 54,
+                        decoration: BoxDecoration(
+                          gradient: AppGradients.accent,
+                          borderRadius: BorderRadius.circular(AppRadius.md),
+                          boxShadow: AppShadows.glow(AppColors.accent, blur: 22),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(FontAwesomeIcons.telegram,
+                                color: Colors.white, size: 18),
+                            SizedBox(width: 10),
+                            Text(
+                              "Hubungi untuk Beli",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 14,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _priceCategoryCard({
+    required String role,
+    required IconData icon,
+    required Color color,
+    required List<Map<String, String>> prices,
+    String? badge,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [color.withOpacity(0.14), color.withOpacity(0.04)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: color.withOpacity(0.45), width: 1.3),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.18),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.22),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  border: Border.all(color: color.withOpacity(0.5)),
+                ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  role,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ),
+              if (badge != null && badge.isNotEmpty)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.22),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: color.withOpacity(0.8)),
+                  ),
+                  child: Text(
+                    badge,
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...prices.map(
+            (price) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    price["duration"] ?? "",
+                    style: TextStyle(
+                      color: AppColors.textSub,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.16),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: color.withOpacity(0.55)),
+                    ),
+                    child: Text(
+                      "Rp ${price["price"]}",
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _featureChip(IconData icon, String label, Color color) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          gradient: AppGradients.glass,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 22),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                color: AppColors.textMain,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _socialBtn({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required Color color,
+  }) {
+    return Expanded(
+      child: PressableScale(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            gradient: AppGradients.glass,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: color, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: AppColors.textMain,
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GlobalTouchWrapper(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (_videoReady && _videoController != null)
+              FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _videoController!.value.size.width,
+                  height: _videoController!.value.size.height,
+                  child: VideoPlayer(_videoController!),
+                ),
+              )
+            else
+              Container(color: AppColors.bgDeep),
+
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.55),
+                      Colors.black.withOpacity(0.78),
+                      Colors.black.withOpacity(0.92),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            SafeArea(
+              child: FadeTransition(
+                opacity: _entryController,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24, vertical: 16),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 8),
+
+                      // Logo card
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppRadius.xl),
+                          border: Border.all(
+                              color: AppColors.accent.withOpacity(0.4),
+                              width: 1.4),
+                          boxShadow: AppShadows.glow(AppColors.accent,
+                              blur: 30, opacity: 0.25),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(AppRadius.xl),
+                          child: AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: Image.asset(
+                              'assets/images/anjay.png',
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                color: AppColors.bgSurface,
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.image,
+                                    color: AppColors.textMuted, size: 40),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      // Title
+                      ShaderMask(
+                        shaderCallback: (rect) => const LinearGradient(
+                          colors: [Color(0xFFFFFFFF), Color(0xFFFF8A8A)],
+                        ).createShader(rect),
+                        child: const Text(
+                          'WELCOME BACK',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 4,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Premium tools for your digital needs.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: AppColors.textSub.withOpacity(0.9),
+                          fontSize: 13.5,
+                          height: 1.5,
+                        ),
+                      ),
+
+                      const SizedBox(height: 26),
+
+                      // Feature chips
+                      Row(
+                        children: [
+                          _featureChip(Icons.bolt_rounded, 'Fast',
+                              const Color(0xFFFFD54F)),
+                          const SizedBox(width: 10),
+                          _featureChip(Icons.shield_rounded, 'Safe',
+                              const Color(0xFF64B5F6)),
+                          const SizedBox(width: 10),
+                          _featureChip(Icons.headset_mic_rounded, '24/7',
+                              const Color(0xFF4DB6AC)),
+                        ],
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      Row(
+                        children: [
+                          _socialBtn(
+                            icon: FontAwesomeIcons.telegram,
+                            label: 'Telegram',
+                            color: const Color(0xFF29B6F6),
+                            onTap: () => _openUrl('https://t.me/xyzyanzzi'),
+                          ),
+                          const SizedBox(width: 10),
+                          _socialBtn(
+                            icon: FontAwesomeIcons.tiktok,
+                            label: 'TikTok',
+                            color: const Color(0xFFFF6B6B),
+                            onTap: () => _openUrl(
+                                'https://www.tiktok.com/@rangga.preset_'),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // BUY AKSES
+                      PressableScale(
+                        onTap: _showPriceList,
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          decoration: BoxDecoration(
+                            gradient: AppGradients.glass,
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.md),
+                            border: Border.all(
+                                color: AppColors.accent.withOpacity(0.4),
+                                width: 1.3),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.shopping_bag_rounded,
+                                  color: AppColors.accent, size: 20),
+                              const SizedBox(width: 10),
+                              Text(
+                                'BUY AKSES',
+                                style: TextStyle(
+                                  color: AppColors.textMain.withOpacity(0.95),
+                                  fontSize: 14.5,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // SIGN IN
+                      PressableScale(
+                        onTap: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const LoginPage()),
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 17),
+                          decoration: BoxDecoration(
+                            gradient: AppGradients.accent,
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.md),
+                            boxShadow: AppShadows.glow(AppColors.accent,
+                                blur: 24, opacity: 0.45),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Sign In Now',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.5,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Icon(Icons.arrow_forward_rounded,
+                                  color: Colors.white, size: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 28),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

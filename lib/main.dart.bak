@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'login_page.dart';
+import 'dashboard_page.dart';
+import 'home_page.dart';
+import 'intro_page.dart';
+import 'landing_page.dart';
+import 'app_theme.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'SixEyesX Project',
+      theme: AppTheme.darkTheme,
+      builder: (context, child) {
+        return GridBackground(child: child ?? const SizedBox.shrink());
+      },
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (_) => const IntroPage());
+          case '/landing':
+            return MaterialPageRoute(builder: (_) => const LandingPage());
+          case '/login':
+            return MaterialPageRoute(builder: (_) => const LoginPage());
+          case '/dashboard':
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (_) => DashboardPage(
+                username: args['username'],
+                password: args['password'],
+                role: args['role'],
+                sessionKey: args['key'],
+                expiredDate: args['expiredDate'],
+                listBug: List<Map<String, dynamic>>.from(args['listBug'] ?? []),
+                listDoos:
+                    List<Map<String, dynamic>>.from(args['listDoos'] ?? []),
+                news: List<Map<String, dynamic>>.from(args['news'] ?? []),
+              ),
+            );
+          case '/home':
+            final args = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+              builder: (_) => HomePage(
+                username: args['username'],
+                password: args['password'],
+                listBug: List<Map<String, dynamic>>.from(args['listBug'] ?? []),
+                role: args['role'],
+                expiredDate: args['expiredDate'],
+                sessionKey: args['sessionKey'],
+              ),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (_) => const Scaffold(
+                body: Center(child: Text("404 - Not Found")),
+              ),
+            );
+        }
+      },
+    );
+  }
+}
