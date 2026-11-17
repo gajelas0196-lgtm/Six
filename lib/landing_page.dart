@@ -203,7 +203,7 @@ class _LandingPageState extends State<LandingPage>
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            FaFaIcon(FontAwesomeIcons.telegram,
+                            FaIcon(FontAwesomeIcons.telegram,
                                 color: Colors.white, size: 18),
                             SizedBox(width: 10),
                             Text(
